@@ -1,45 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="fill_parent"
-              android:layout_height="fill_parent"
+<com.cheheihome.easylayout.widget.EasyLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+android:orientation="vertical"
+                                             android:layout_width="fill_parent"
+                                             android:layout_height="fill_parent"
         >
 
+    <TextView
+            android:id="@+id/header"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Hello World, MyActivity"
+            />
+
+    <com.cheheihome.easylayout.widget.WaywardIndicator
+
+            android:background="#cc3212"
+            android:id="@+id/indicator"
+            android:text="indicator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
 
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent"
+    <com.cheheihome.easylayout.widget.ExpandListView
 
-                android:id="@+id/easylayout"
-                >
-
-            <TextView
-                    android:id="@+id/header"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Hello World, MyActivity"
-                    />
-
-            <com.cheheihome.easylayout.widget.WaywardIndicator
-
-                    android:background="#cc3212"
-                    android:id="@+id/indicator"
-                    android:text="indicator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+            android:layout_width="match_parent"
+            android:id="@+id/listview"
+            android:layout_height="wrap_content"/>
 
 
-            <com.cheheihome.easylayout.widget.ExpandListView
-
-                    android:layout_width="match_parent"
-                    android:id="@+id/listview"
-                    android:layout_height="wrap_content"/>
-
-
-        </LinearLayout>
-
-
-</LinearLayout>
+</com.cheheihome.easylayout.widget.EasyLayout>
 

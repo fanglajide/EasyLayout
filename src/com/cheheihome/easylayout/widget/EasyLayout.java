@@ -8,43 +8,53 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 /**
  * Created by chanlevel on 15/1/5.
  */
-public class EasyLayout extends ViewGroup {
+public class EasyLayout extends LinearLayout {
     private View headView;
     private View indicatorView;
     private AbsListView listView;
-private ViewDragHelper viewDragHelper;
+    private ViewDragHelper viewDragHelper;
+    private boolean isUp;
+
     public EasyLayout(Context context) {
         super(context);
-        findViews();
+        init();
     }
 
     public EasyLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        findViews();
+        init();
     }
 
     public EasyLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        findViews();
+        init();
     }
 
-    private void findViews() {
+    private void init() {
         headView = this.getChildAt(0);
         indicatorView = this.getChildAt(1);
-        listView = (AbsListView) this.getChildAt(2);
-        viewDragHelper=ViewDragHelper.create(this, callback);
+        if (this.getChildAt(2) instanceof AbsListView) listView = (AbsListView) this.getChildAt(2);
+        // else throw new IllegalArgumentException("need a AbsListView");
+        viewDragHelper = ViewDragHelper.create(this, callback);
 
     }
 
 
-    ViewDragHelper.Callback callback=new ViewDragHelper.Callback() {
+    ViewDragHelper.Callback callback = new ViewDragHelper.Callback() {
         @Override
         public boolean tryCaptureView(View view, int i) {
+
+
+
+            
+
+
             return false;
         }
 
@@ -74,7 +84,7 @@ private ViewDragHelper viewDragHelper;
     public void computeScroll() {
         super.computeScroll();
 
- 
+
     }
 
     @Override
@@ -96,13 +106,14 @@ private ViewDragHelper viewDragHelper;
 
                     //上滑
                 else if (currentY < startY) {
-                    if (getAbsFirst() == 0 && getIndicatorY() > 0) return true;
+                    isUp = true;
+                    if (isListatTop() && getIndicatorY() > 0) return true;
                     else if (getIndicatorY() <= 0) {
 
                         return false;
                     }
                 } else {//下滑
-
+                    isUp = false;
                     if (getIndicatorY() <= 0) return false;
                     else return true;
 
@@ -117,8 +128,8 @@ private ViewDragHelper viewDragHelper;
 
         }
 
-
-        return super.onInterceptTouchEvent(ev);
+        return viewDragHelper.shouldInterceptTouchEvent(ev);
+        // return super.onInterceptTouchEvent(ev);
     }
 
     /**
@@ -132,21 +143,21 @@ private ViewDragHelper viewDragHelper;
      */
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-
+        super.onLayout(changed, l, t, r, b);
     }
 
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-
+        viewDragHelper.processTouchEvent(ev);
 
         return super.onTouchEvent(ev);
     }
 
 
-    private int getAbsFirst() {
+    private boolean isListatTop() {
 
-        return listView.getFirstVisiblePosition();
+        return listView.getFirstVisiblePosition() == 0;
 
     }
 
@@ -155,6 +166,7 @@ private ViewDragHelper viewDragHelper;
 
         return (int) listView.getChildAt(0).getTop();
     }
+
 
     private int firstVisibleItem;
 
@@ -171,11 +183,6 @@ private ViewDragHelper viewDragHelper;
     };
 
 
-
-
-
-
-
     private boolean compareY() {
 
         return getlistFirstY() < indicatorView.getBottom();
@@ -184,7 +191,10 @@ private ViewDragHelper viewDragHelper;
 
 
     private int getIndicatorY() {
-        return (int) indicatorView.getY();
+        if (indicatorView != null)
+            return (int) indicatorView.getY();
+        else return -1;
+
     }
 
 
